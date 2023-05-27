@@ -20,6 +20,9 @@ class MainActivity2 : AppCompatActivity() {
         password_input.setText(password)
         username_show.setText(username)
         back_button.setOnClickListener{
+            val intent = Intent()
+            intent.putExtra("data_return", username)
+            setResult(RESULT_OK, intent)
             finish()
         }
         time_text.setOnClickListener{

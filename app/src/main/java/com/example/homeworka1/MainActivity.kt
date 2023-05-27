@@ -2,6 +2,7 @@ package com.example.homeworka1
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,10 +17,21 @@ import com.example.homeworka1.ui.theme.HomeWorkA1Theme
 import kotlinx.android.synthetic.main.first_layout.exit_button
 import kotlinx.android.synthetic.main.first_layout.login_button
 import kotlinx.android.synthetic.main.first_layout.password_input
+import kotlinx.android.synthetic.main.first_layout.show_someone
 import kotlinx.android.synthetic.main.first_layout.username_input
 import kotlin.system.exitProcess
 
 class MainActivity : ComponentActivity() {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            1 -> if(resultCode == RESULT_OK){
+                val returnedData = data?.getStringExtra("data_return")
+                show_someone.setText(returnedData + "知道你的信息")
+                Log.d("FirstActivity", "returned data is $returnedData")
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -42,7 +54,7 @@ class MainActivity : ComponentActivity() {
                     val intent = Intent(this, MainActivity2::class.java)
                     intent.putExtra("username", username_input.text.toString())
                     intent.putExtra("password", password_input.text.toString())
-                    startActivity(intent)
+                    startActivityForResult(intent, 1)
                 }else{
                     Toast.makeText(this, "请输入密码!", Toast.LENGTH_SHORT).show()
                 }

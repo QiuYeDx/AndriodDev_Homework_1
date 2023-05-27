@@ -88,9 +88,10 @@
     </LinearLayout>
 
     <EditText
+        android:id="@+id/show_someone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="没人知道你的信息！"
+        android:text="没人知道你的信息"
         android:enabled="false"
         android:layout_marginTop="10dp"
         android:background="#FFFFFF"
