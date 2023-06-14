@@ -1,6 +1,9 @@
 package com.example.homeworka1
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -18,7 +21,9 @@ import kotlinx.android.synthetic.main.first_layout.exit_button
 import kotlinx.android.synthetic.main.first_layout.login_button
 import kotlinx.android.synthetic.main.first_layout.password_input
 import kotlinx.android.synthetic.main.first_layout.show_someone
+import kotlinx.android.synthetic.main.first_layout.show_time
 import kotlinx.android.synthetic.main.first_layout.username_input
+import java.util.Calendar
 import kotlin.system.exitProcess
 
 class MainActivity : ComponentActivity() {
@@ -32,6 +37,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    lateinit var timeChangeReceiver: TimeChangeReceiver
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -46,6 +54,15 @@ class MainActivity : ComponentActivity() {
             }
         }
         setContentView(R.layout.first_layout)
+        val calendar: Calendar = Calendar.getInstance()
+        val hour: Int = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute: Int = calendar.get(Calendar.MINUTE)
+        show_time.setText("当前时间为 " + hour.toString() + "点" + minute.toString() + "分")
+
+        val intentFilter = IntentFilter()
+        intentFilter.addAction("android.intent.action.TIME_TICK")
+        timeChangeReceiver = TimeChangeReceiver()
+        registerReceiver(timeChangeReceiver, intentFilter)
 
         login_button.setOnClickListener {
             if(username_input.text.toString() != ""){
@@ -70,6 +87,22 @@ class MainActivity : ComponentActivity() {
             finishAffinity() // 关闭所有活动（Activity）
             exitProcess(0) // 终止当前进程
         }
+
+    }
+
+    inner class TimeChangeReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            println("!!!")
+            val calendar: Calendar = Calendar.getInstance()
+            val hour: Int = calendar.get(Calendar.HOUR_OF_DAY)
+            val minute: Int = calendar.get(Calendar.MINUTE)
+            show_time.setText("当前时间为 " + hour.toString() + "点" + minute.toString() + "分")
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(timeChangeReceiver)
     }
 }
 
