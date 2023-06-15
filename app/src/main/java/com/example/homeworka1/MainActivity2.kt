@@ -14,14 +14,20 @@ class MainActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.second_layout)
-        val username = intent.getStringExtra("username")
-        username_input.setText(username)
-        val password = intent.getStringExtra("password")
-        password_input.setText(password)
-        username_show.setText(username)
+
+        val person = intent.getSerializableExtra("person_data") as MainActivity.Person
+        username_input.setText(person.username)
+        password_input.setText(person.password)
+        username_show.setText(person.username)
+//        val username = intent.getStringExtra("username")
+//        username_input.setText(username)
+//        val password = intent.getStringExtra("password")
+//        password_input.setText(password)
+//        username_show.setText(username)
         back_button.setOnClickListener{
             val intent = Intent()
-            intent.putExtra("data_return", username)
+//            intent.putExtra("data_return", username)
+            intent.putExtra("data_return", person.username)
             setResult(RESULT_OK, intent)
             finish()
         }

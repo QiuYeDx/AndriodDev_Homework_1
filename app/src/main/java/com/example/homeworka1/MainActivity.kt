@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.first_layout.password_input
 import kotlinx.android.synthetic.main.first_layout.show_someone
 import kotlinx.android.synthetic.main.first_layout.show_time
 import kotlinx.android.synthetic.main.first_layout.username_input
+import java.io.Serializable
 import java.util.Calendar
 import kotlin.system.exitProcess
 
@@ -36,6 +37,11 @@ class MainActivity : ComponentActivity() {
                 Log.d("FirstActivity", "returned data is $returnedData")
             }
         }
+    }
+
+    class Person: Serializable{
+        var username = ""
+        var password = ""
     }
 
     lateinit var timeChangeReceiver: TimeChangeReceiver
@@ -68,10 +74,16 @@ class MainActivity : ComponentActivity() {
             if(username_input.text.toString() != ""){
                 if(password_input.text.toString() != ""){
                     Toast.makeText(this, "登陆成功", Toast.LENGTH_SHORT).show()
+                    val person = Person()
+                    person.username = username_input.text.toString()
+                    person.password = password_input.text.toString()
                     val intent = Intent(this, MainActivity2::class.java)
-                    intent.putExtra("username", username_input.text.toString())
-                    intent.putExtra("password", password_input.text.toString())
+                    intent.putExtra("person_data", person)
                     startActivityForResult(intent, 1)
+//                    val intent = Intent(this, MainActivity2::class.java)
+//                    intent.putExtra("username", username_input.text.toString())
+//                    intent.putExtra("password", password_input.text.toString())
+//                    startActivityForResult(intent, 1)
                 }else{
                     Toast.makeText(this, "请输入密码!", Toast.LENGTH_SHORT).show()
                 }
